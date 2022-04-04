@@ -102,7 +102,12 @@ class FilesMixin:
         :return:
         """
         if file_or_folder_path.isdigit():
-            path_params = f"id:{file_or_folder_path}"
+            # decide if either "link" or "id" should be prefixed, depending on DSM version
+            if self.session.dsm_version == "7":
+                document_prefix = "link"
+            else:
+                document_prefix = "id"
+            path_params = f"{document_prefix}:{file_or_folder_path}"
         else:
             # add start position /
             path_params = f"/{file_or_folder_path}" if not file_or_folder_path.startswith('/') else file_or_folder_path
